@@ -33,7 +33,7 @@ repository. All test scripts (or more precisely: test functions) should
 run through without errors, or should throw a MATLAB error.
 
 ## Requirements
-To run the tests, of course a MATLAB installation is needed. The dashboard scripts are 
+To run the tests, of course a MATLAB installation is needed. The dashboard scripts are
 designed to run on the DCCN mentat cluster, and the scripts assume a Unix/Linux
 environment. Further, the following software is needed:
 - MATLAB
@@ -41,11 +41,13 @@ environment. Further, the following software is needed:
 
 ## How it works
 The **schedule-tests.sh** bash script identifies all test scripts in a specific FieldTrip directory. For each test script, a temporary bash script is created that
+
 1. prints some diagnostic information
 2. starts MATLAB with the specific FT function to test, wrapped in xUnit
 3. prints some diagnostic information
 4. this bash script is scheduled to be executed on the Torque cluster
 5. MATLAB starts on a compute node and writes log information to screen, which is captured in stdout/stderr
+
 Upon job completion, the stdout/stderr files are copied from the compute node. The stdoud log file contains either the string "PASSED" or "FAILED" and can be parsed
 
 The scheduling of the jobs (on the basis of new revisions),
