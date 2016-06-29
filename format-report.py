@@ -4,12 +4,12 @@ from fttest import TestResult
 from pprint import pprint
 
 FT_GOOGLECODE = 'http://code.google.com/p/fieldtrip/source/detail?r=%s'
-FT_BUGZILLA = 'http://bugzilla.fcdonders.nl/show_bug.cgi?id=%s'
+FT_BUGZILLA = 'http://bugzilla.fieldtriptoolbox.org/show_bug.cgi?id=%s'
 TXT_TEMPLATE = \
   '%(revision)6s %(test_name)30s %(bug_id)8s %(outcome)10s %(duration)8s'
 DOCUWIKI_HEADER = '<sortable 4>\n^Revision ^ Test ^ Bugzilla ^ Status ^  Duration ^ History ^'
 DOCUWIKI_TEMPLATE = '|%(revision)s | %(test_name)s | %(bug)s | %(outcome)s |  %(duration)s| %(history)s|'
-WIKI_LOGURL = 'http://fieldtrip.fcdonders.nl/development/dashboard/r%(revision)s/%(testname)s'
+WIKI_LOGURL = 'http://www.fieldtriptoolbox.org/development/dashboard/r%(revision)s/%(testname)s'
 DOCUWIKI_FOOTER = "</sortable>"
 
 log = logging.getLogger(__name__)

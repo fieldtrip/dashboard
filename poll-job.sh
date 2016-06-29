@@ -8,7 +8,7 @@ FTTESTPATH=`readlink -e $(dirname $0)`
 REVPREFIX="r"
 LOGPATH=$FTTESTPATH/logs
 REVPATH=$FTTESTPATH/revs
-LOCALCOPY=$FTTESTPATH/trunk
+LOCALCOPY=$REVPATH/trunk
 NBACK=2
 HISTFILE=$FTTESTPATH/tested.txt
 
@@ -46,7 +46,7 @@ for rev in $(eval echo "{$head..$[$head - $NBACK + 1]}"); do
     # create cheap checkout (this should be necessary, see git-svn)
     echo Emulating fresh checkout in $revdir...
     rm -rf $revdir
-    cp -rl $LOCALCOPY $revdir
+    rsync -arpv $LOCALCOPY/ $revdir
     pushd $revdir >/dev/null
     svn update -r $rev
     popd >/dev/null

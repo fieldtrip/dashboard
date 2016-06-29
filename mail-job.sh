@@ -6,7 +6,8 @@
 # the following line caused the script to fail (jan 2013), so disable
 # set -e -u
 
-DASHBOARDDIR=$HOME/public/dashboard
+FTTESTPATH=`readlink -e $(dirname $0)`
+DASHBOARDDIR=$FTTESTPATH/wiki
 
 # sort -k3 $DASHBOARDDIR/report.txt | grep -v passed | \
 #   mail -s "FieldTrip dashboard errors `date +%F`" \

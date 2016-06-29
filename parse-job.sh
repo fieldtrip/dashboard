@@ -6,13 +6,12 @@
 set -e -u
 FTTESTPATH=`readlink -e $(dirname $0)`
 LOGPATH=$FTTESTPATH/logs
-echo LOGPATH=$LOGPATH
 
 cd $LOGPATH
 
 # List warm (revisions that are probably being tested) and old (revisions that have been tested a while ago):
-WARMREVS=`find $LOGPATH -maxdepth 1 -mindepth 1 -type d -name "r????" -ctime -1`
-OLDREVS=`find $LOGPATH -maxdepth 1 -mindepth 1 -type d -name "r????" -ctime +5  | sort | head -n -5`
+WARMREVS=`find $LOGPATH -maxdepth 1 -mindepth 1 -type d -name "r[0-9]*" -ctime -1`
+OLDREVS=`find  $LOGPATH -maxdepth 1 -mindepth 1 -type d -name "r[0-9]*" -ctime +5  | sort -V | head -n -5`
 
 echo WARMREVS=$WARMREVS
 echo OLDREVS=$OLDREVS

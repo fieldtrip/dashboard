@@ -6,7 +6,7 @@
 set -e -u
 FTTESTPATH=`readlink -e $(dirname $0)`
 LOGPATH=$FTTESTPATH/logs
-DASHBOARDDIR=~/public/dashboard
+DASHBOARDDIR=$FTTESTPATH/wiki
 
 mkdir -p $DASHBOARDDIR/dashboard
 cd $DASHBOARDDIR;
@@ -22,8 +22,8 @@ find $LOGPATH -maxdepth 1 -name "r*" -type d \
 chmod -R +rX dashboard*
 
 # Clean up dashboard dir
-find $DASHBOARDDIR/dashboard -maxdepth 1 -name "r*" | sort | head -n -5 | \
-  xargs -I {} rm -r {}
 
-rsync -arpv --delete $DASHBOARDDIR/dashboard* roboos@fieldtrip:/var/www/fieldtrip.fcdonders.nl/data/pages/development/
+find $DASHBOARDDIR/dashboard -maxdepth 1 -name "r*" | sort | head -n -5 | xargs -I {} rm -r {}
+
+rsync -arpv --delete $DASHBOARDDIR/dashboard* roboos@www.fieldtriptoolbox.org:/var/www/www.fieldtriptoolbox.org/data/pages/development/
 
