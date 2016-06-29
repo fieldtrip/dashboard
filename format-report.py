@@ -29,7 +29,7 @@ def bad_revisions(revisions, status_strings):
 
 def status_char(test):
   '''Convert status string to character for spark-line visualisation.'''
-  mapping = {'passed' : '+', 'failed' : '-', 'unknown' : '?'}
+  mapping = {'passed' : 'o', 'failed' : 'x', 'unknown' : '?'}
   if test:
     return mapping.get(test.outcome, '!')
   return '!'

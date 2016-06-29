@@ -1,20 +1,24 @@
 #!/usr/bin/env bash
+#
+# This script looks at recent svn updates, finds revisions that have not been tested yet, checks them out and schedules them for testing.
+#
+
 set -u -e  # exit on error or if variable is unset
 FTTESTPATH=`readlink -e $(dirname $0)`
 REVPREFIX="r"
 LOGPATH=$FTTESTPATH/logs
 REVPATH=$FTTESTPATH/revs
 LOCALCOPY=$FTTESTPATH/trunk
-NBACK=3
+NBACK=2
 HISTFILE=$FTTESTPATH/tested.txt
 
 # initialize files if needed
 touch $HISTFILE
 mkdir -p $LOGPATH $REVPATH
 
-# First, cleanup by removing revisions older than a one day:
+# First, cleanup by removing revisions older than a few days day:
 echo Finding old checkouts to remove...
-OLDREVS=`find $REVPATH -maxdepth 1 -type d  -ctime +0 -name "$REVPREFIX*"`
+OLDREVS=`find $REVPATH -maxdepth 1 -type d  -ctime +5 -name "$REVPREFIX*"`
 echo Removing $OLDREVS...
 rm -rf $OLDREVS
 
@@ -35,7 +39,8 @@ for rev in $(eval echo "{$head..$[$head - $NBACK + 1]}"); do
     echo Revision $rev has not been tested.
 
     # remove dirs in case of error
-    trap "echo Snap :\(; rm -rf $revdir $logdir; exit 1" ERR  
+    # trap "echo Snap :\(; rm -rf $revdir $logdir; exit 1" ERR  
+    trap "echo Snap :\(; rm -rf $revdir ; exit 1" ERR  
     mkdir -p $logdir
 
     # create cheap checkout (this should be necessary, see git-svn)

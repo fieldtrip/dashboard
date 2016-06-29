@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+#
+# this script converts the test results into a text file and sends it as an email
+#
 
 # the following line caused the script to fail (jan 2013), so disable
 # set -e -u
@@ -69,7 +72,6 @@ then
 	for f in $UNKNOWN_NEW
 	do
 		echo "  $f" >>$EMAIL
-		echo >>$EMAIL
 	done
 fi
 

@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+#
+# this script converts the test results into a text file and sends it to the wiki
+#
+
 set -e -u
 FTTESTPATH=`readlink -e $(dirname $0)`
 LOGPATH=$FTTESTPATH/logs

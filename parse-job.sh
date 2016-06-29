@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+#
+# this script gathers all test results into a pickle and a json file
+#
+
 set -e -u
 FTTESTPATH=`readlink -e $(dirname $0)`
 LOGPATH=$FTTESTPATH/logs
@@ -7,8 +11,8 @@ echo LOGPATH=$LOGPATH
 cd $LOGPATH
 
 # List warm (revisions that are probably being tested) and old (revisions that have been tested a while ago):
-WARMREVS=`find $LOGPATH -maxdepth 1 -type d -name "r*" -ctime -1`
-OLDREVS=`find $LOGPATH -maxdepth 1 -mindepth 1 -type d -ctime +3  | sort | head -n -5`
+WARMREVS=`find $LOGPATH -maxdepth 1 -mindepth 1 -type d -name "r????" -ctime -1`
+OLDREVS=`find $LOGPATH -maxdepth 1 -mindepth 1 -type d -name "r????" -ctime +5  | sort | head -n -5`
 
 echo WARMREVS=$WARMREVS
 echo OLDREVS=$OLDREVS
@@ -25,6 +29,6 @@ done
 for REV in $WARMREVS
 do
   echo Parsing $REV...
-  find $REV -type f -name "*.txt" -print0 | \
-    xargs -0 $FTTESTPATH/parse-logs.py -p $REV.pickle -j $REV.json
+  find $REV -type f -name "*.txt" -print0 |\
+      xargs -0 $FTTESTPATH/parse-logs.py -p $REV.pickle -j $REV.json
 done

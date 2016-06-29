@@ -1,21 +1,29 @@
 #!/usr/bin/env bash
 #
+# This script creates a temporary matlab script for a specific revision and specific test.
+#
 # Use as
 #  run-test.sh  <fieldtripdir> <testscript>
 #
-# The output of this script is captured and displayed on the wiki
 
 set -u -e  # exit on error or if variable is unset
 FIELDTRIP=`readlink -f $1`
-TESTFILE=`readlink -f $2`
+TESTSCRIPT=`readlink -f $2`
 
-MATLAB="/opt/matlab2011b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread"
-MATLAB="/opt/cluster/matlab2012a -nodesktop -nosplash -nodisplay"
+LICENSE="-c $HOME/etc/matlab2012b.lic"
+
+if [ -d /scratch/opt/matlab2012b ] ; then
+MATLAB="/scratch/opt/matlab2012b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread $LICENSE"
+else
+#MATLAB="/opt/cluster/matlab2012b -nodesktop -nosplash -nodisplay"
+MATLAB="/opt/matlab2012b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread $LICENSE"
+fi
+
 XUNIT=`readlink -f /home/common/matlab/xunit`
 
-TEST=`basename $TESTFILE .m`
-TESTDIR=`dirname $TESTFILE`
-TEMPFILE=`mktemp -t ft_test_runner_XXXX`.m  # needs to be valid MATLAB function name.
+TEST=`basename $TESTSCRIPT .m`
+TESTDIR=`dirname $TESTSCRIPT`
+TEMPFILE=`mktemp $HOME/fieldtrip/dashboard/tmp/test_XXXXXX.m`
 
 # Create temporary m-file in-line, using what is called an 'here document' in
 # Bash:
@@ -27,32 +35,49 @@ cat > $TEMPFILE <<EOF
 % (another bug?).
 
 try
-  restoredefaultpath;
-  addpath $XUNIT; % for running and discovering unit tests.
-  addpath $FIELDTRIP; 
-  ft_defaults; which ft_defaults
-  global ft_default; ft_default = [];
+  [status, result] = system('date +%c\ %Z\ %s');
+  fprintf('MATLAB script starts %s\n', result);
 
-  cd $TESTDIR;
-  runtests $TEST;
+  restoredefaultpath
+  addpath $XUNIT      % for running and discovering unit tests.
+  addpath $FIELDTRIP 
+
+  ft_defaults
+  which ft_defaults
+
+  global ft_default
+  ft_default = [];
+
+  memtic
+  cd $TESTDIR
+  runtests $TEST
+  memtoc
+
+  % display path for debugging purposes --- can be enabled.
+  % path
+
+  [status, result] = system('date +%c\ %Z\ %s');
+  fprintf('MATLAB script ends %s\n', result);
+
 catch err
   err
 end
 
-% path % display path for debugging purposes --- can be enabled.
-exit;
+exit
 %-------------------------------------------------------------------------------
 EOF
 
 echo "<code>"  # for DocuWiki formatting
-(cd $TESTDIR; svn info)
+cd $TESTDIR && svn info # this is needed in parse-logs.py
 cd $(dirname $TEMPFILE)
 # all output of this script is captured in the log message
 # cat ${TEMPFILE}
 
 MFUN=${TEMPFILE##*/}  # remove dir
-MFUN=${MFUN%.*}   # remove extension
+MFUN=${MFUN%.*}       # remove extension
+# $HOME/bin/shmwait 15  # start different instances 10 seconds apart
 $MATLAB -r $MFUN
 
 echo "</code>"  # for DocuWiki formatting
 rm $TEMPFILE
+
