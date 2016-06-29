@@ -22,7 +22,7 @@ fi
 if [[ $MATLABCMD == *"matlab"* ]]; then
 XUNIT=`readlink -f /home/common/matlab/xunit`
 elif [[ $MATLABCMD == *"octave"* ]]; then
-XUNIT=`readlink -f /home/mrphys/roboos/matlab/xunit-octave`
+XUNIT=`readlink -f $HOME/matlab/xunit-octave`
 else
 >&2 echo Error: unknown MATLABCMD $MATLABCMD
 fi

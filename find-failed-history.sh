@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /home/mrphys/roboos/fieldtrip/dashboard || exit
+cd $HOME/fieldtrip/dashboard || exit
 
 REVISION=`ls -d logs/r????? | tail -n 1 | cut -d / -f 2`
 echo $REVISION

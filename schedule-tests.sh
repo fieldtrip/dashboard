@@ -54,7 +54,7 @@ for TEST in `find $FIELDTRIP -path "*test/test*.m"` ; do
   # MEM=8gb
 
   # Create temp file for job submission with so-called "here document":
-  TMP=`mktemp /home/mrphys/roboos/fieldtrip/dashboard/tmp/test_XXXXXXXX.sh`
+  TMP=`mktemp $HOME/fieldtrip/dashboard/tmp/test_XXXXXXXX.sh`
   # ---------------------------------------------------------------------------
   cat > $TMP <<EOF
 #!/usr/bin/env bash
