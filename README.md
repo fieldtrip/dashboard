@@ -1,4 +1,4 @@
-# FT-test: A test runner for FieldTrip
+# FieldTrip - Dashboard for automated testing and quality control
 
 ## Abstract
 The purpose of dashboard is to provide rapid feedback to FieldTrip developers on
@@ -23,60 +23,34 @@ test results.
 
 
 ### Design requirements
-- All tests are run for every revision,
-- results for a revision are available in a timely fashion (30 mins?),
-- if a change causes new tests to fail, a mail is sent to the committer,
-- test results are made available in a formatted table on the FT wiki.
-
+- all tests can be run for every revision
+- all tests can be run for different MATLAB and Octave versions
+- the summary of results is displayed in a dashboard-like fasion
 
 ## What is being tested
-Test scripts in subdirectories ending with 'test' in the FieldTrip repository.
+MATLAB scripts in subdirectories ending with 'test' in the FieldTrip
+repository. All test scripts (or more precisely: test functions) should
+run through without errors, or should throw a MATLAB error.
 
-
-## Installation
-### Requirements
-To run the tests, of course a MATLAB installation is needed. FT-test is
+## Requirements
+To run the tests, of course a MATLAB installation is needed. The dashboard scripts are 
 designed to run on the DCCN mentat cluster, and the scripts assume a Unix/Linux
 environment. Further, the following software is needed:
 - MATLAB
 - xUnit
 
-### One step at at time
-1. Test if the environment is setup correctly by running a single test:
-    $ ./run-test.sh testfile FIELDTRIPDIR
-2. Test if new revisions are detected and downloaded automatically.
-3. Run a batch on the cluster.
-4. Add the cronjobs for polling, parsing and reporting.
-
-
 ## How it works
-### SVN polling
-A svn-poll cronjob is checking for new SVN revisions. When a new revision is
-detected:
-1.  a new revision #### checked out on disk,
-2.  the tests are scheduled to run, and results written to `r####-test-results`.
+The **schedule-tests.sh** bash script identifies all test scripts in a specific FieldTrip directory. For each test script, a temporary bash script is created that
+1. prints some diagnostic information
+2. starts MATLAB with the specific FT function to test, wrapped in xUnit
+3. prints some diagnostic information
+4. this bash script is scheduled to be executed on the Torque cluster
+5. MATLAB starts on a compute node and writes log information to screen, which is captured in stdout/stderr
+Upon job completion, the stdout/stderr files are copied from the compute node. The stdoud log file contains either the string "PASSED" or "FAILED" and can be parsed
 
-Revisions older than a day are deleted again; this is the window in which the tests have to be performed.
-
-
-### Parsing the log files
-A parsing cronjob is parsing the results in `r####-test-results` dirs not older
-than a day, and storing the per-revision test results. This runs asynchronously
-with the polling job, so that results can be made available when test complete.
-After three days, the logs are compressed.
-
-
-### Presenting the results
-Finally, a presentation cronjob integrates over the test results _for multiple
-revisions_, and creates a text report and a wiki-formatted report for the last
-revision.
-
-Also a daily report consisting of the non-passing tests is mailed to
-fieldtrip-bugs@science.ru.nl.
-
-# TODO
-- Parsing of the results appears to be a bit slow. This might form a
-  performance bottleneck in the future.
-- The pickle format is very cumbersome. Find proper intermediate format
-  (JSON?), work with that.
-- Although parsing of the logs seems to work, it is a bit of a mess.
+The scheduling of the jobs (on the basis of new revisions),
+the parsing of the log files, and the reporting on the wiki
+and through email were all part of the dashboard code. With the
+recent migration from SVN to Git, these aspects of the dashboard
+have become defunct and will have to be reimplemented. See
+http://bugzilla.fieldtriptoolbox.org/show_bug.cgi?id=3066
