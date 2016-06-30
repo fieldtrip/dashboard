@@ -1,4 +1,8 @@
+# these contain temporary files
 logs/*
 revs/*
 tmp/*
 wiki/*
+
+# node modules should be installed with "npm install"
+node/node_modules/*
