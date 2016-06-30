@@ -6,3 +6,6 @@ wiki/*
 
 # node modules should be installed with "npm install"
 node/node_modules/*
+
+# the secret key should not be shared on github
+node/secret.sh
