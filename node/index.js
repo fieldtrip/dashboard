@@ -9,6 +9,13 @@ app.use(bodyParser.json());
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 var db;
 
+var COLLECTION = process.env.MONGODB_COLLECTION;
+
+if (typeof COLLECTION == 'undefined') {
+  console.log('required environment variable is not set');
+  process.exit(1);
+}
+
 // Connect to the database before starting the application server. 
 mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, database) {
   if (err) {
@@ -47,7 +54,7 @@ app.post("/test", function(req, res) {
     handleError(res, "Invalid user input", "Must provide required fields.", 400);
   }
 
-  db.collection("test").insertOne(newTest, function(err, doc) {
+  db.collection(COLLECTION).insertOne(newTest, function(err, doc) {
     if (err) {
       handleError(res, err.message, "Failed to create new test.");
     } else {
@@ -57,7 +64,7 @@ app.post("/test", function(req, res) {
 });
 
 app.get("/test", function(req, res) {
-  db.collection("test").find({}).toArray(function(err, docs) {
+  db.collection(COLLECTION).find({}).toArray(function(err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get tests.");
     } else {
@@ -72,5 +79,37 @@ app.get("/test", function(req, res) {
  *    DELETE: deletes test by id
  */
 
+app.get("/test/:id", function(req, res) {
+  db.collection(COLLECTION).findOne({ _id: new ObjectID(req.params.id) }, function(err, doc) {
+    if (err) {
+      handleError(res, err.message, "Failed to get contact");
+    } else {
+      res.status(200).json(doc);
+    }
+  });
+});
+
+app.put("/test/:id", function(req, res) {
+  var updateDoc = req.body;
+  delete updateDoc._id;
+
+  db.collection(COLLECTION).updateOne({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
+    if (err) {
+      handleError(res, err.message, "Failed to update contact");
+    } else {
+      res.status(204).end();
+    }
+  });
+});
+
+app.delete("/test/:id", function(req, res) {
+  db.collection(COLLECTION).deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
+    if (err) {
+      handleError(res, err.message, "Failed to delete contact");
+    } else {
+      res.status(204).end();
+    }
+  });
+});
 
 
