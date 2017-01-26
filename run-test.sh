@@ -7,11 +7,12 @@
 #
 # It is executed by schedule-test.sh
 
+source /opt/optenv.sh
 module load openmeeg
 
 set -u -e  # exit on error or if variable is unset
 FIELDTRIP=`readlink -f $1`
-TESTSCRIPT=`readlink -f $2`
+TEST=`readlink -f $2`
 
 if [ "$#" -ge 3 ]; then
 MATLABCMD=$3
@@ -27,12 +28,13 @@ else
 >&2 echo Error: unknown MATLABCMD $MATLABCMD
 fi
 
-TEST=`basename $TESTSCRIPT .m`
-TESTDIR=`dirname $TESTSCRIPT`
-TEMPFILE=`mktemp $HOME/fieldtrip/dashboard/tmp/test_XXXXXX.m`
+# the FieldTrip test script test to be executed is passed with the full path
+TESTDIR=`dirname $TEST`
+TESTCALL=`basename $TEST .m`
 
-# Create temporary m-file in-line, using what is called an 'here document' in bash
-cat > $TEMPFILE <<EOF
+# Create temp file for job submission with so-called "here document":
+TESTSCRIPT=`mktemp $HOME/fieldtrip/dashboard/scripts/test_XXXXXXXX.m`
+cat > $TESTSCRIPT <<EOF
 %-------------------------------------------------------------------------------
 % This is an automatically generated m-file to run a specific test. It would
 % seem obvious to directly run a command in matlab with 'matlab -r "eval(...)',
@@ -42,45 +44,37 @@ cat > $TEMPFILE <<EOF
 try
 
   restoredefaultpath
-  addpath $XUNIT      % for running and discovering unit tests.
   addpath $FIELDTRIP 
+  addpath $FIELDTRIP/test
 
   ft_defaults
-  which ft_defaults
-
   global ft_default
   ft_default = [];
 
   cd $TESTDIR
-  runtests $TEST
+  ft_test run $TESTCALL
 
 catch err
-  err
+  disp(err)
 end
 
 exit
 %-------------------------------------------------------------------------------
 EOF
 
-echo "<code>"  # for DocuWiki formatting
-# cd $TESTDIR && ( svn info || git show HEAD ) # this is needed in parse-logs.py
-cd $TESTDIR && git log HEAD -n 1 
-cd $(dirname $TEMPFILE)
-# all output of this script is captured in the log message
-# cat ${TEMPFILE}
-
-MFUN=${TEMPFILE##*/}  # remove dir
-MFUN=${MFUN%.*}       # remove extension
+MDIR=`dirname ${TESTSCRIPT}`
+MFUN=${TESTSCRIPT##*/}  # remove dir
+MFUN=${MFUN%.*}         # remove extension
 # $HOME/bin/shmwait 15  # start different instances 10 seconds apart
 
 if [[ $MATLABCMD == *"matlab"* ]]; then
-$MATLABCMD -r $MFUN
+$MATLABCMD -r "cd $MDIR ; $MFUN"
 elif [[ $MATLABCMD == *"octave"* ]]; then
-$MATLABCMD "$MFUN".m
+$MATLABCMD ${TESTSCRIPT}
 else
 >&2 echo Error: unknown MATLABCMD $MATLABCMD
 fi
 
-echo "</code>"  # for DocuWiki formatting
-rm $TEMPFILE
+# remove the temp file, not the actual FieldTrip test script
+rm $TESTSCRIPT
 
