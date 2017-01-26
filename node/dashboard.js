@@ -50,7 +50,7 @@ function handleError(res, reason, message, code) {
 app.post("/api", function(req, res) {
   var newTest = req.body;
   newTest.createDate = new Date();
-  console.log(newTest);
+  // console.log(newTest);
 
   if (!(req.body.fieldtripversion || req.matabversion)) {
     handleError(res, "Invalid user input", "Must provide required fields.", 400);
