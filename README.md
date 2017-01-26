@@ -33,14 +33,14 @@ repository. All test scripts (or more precisely: test functions) should
 run through without errors, or should throw a MATLAB error.
 
 ## Requirements
-To run the tests, of course a MATLAB installation is needed. The dashboard scripts are
-designed to run on the DCCN mentat cluster, and the scripts assume a Unix/Linux
-environment. Further, the following software is needed:
-- MATLAB
-- xUnit
+To run the tests, of course a MATLAB or Octave installation is needed. The
+dashboard scripts are designed to run on the DCCN mentat cluster, and
+the scripts assume a Unix/Linux environment.
 
 ## How it works
-The **schedule-tests.sh** bash script identifies all test scripts in a specific FieldTrip directory. For each test script, a temporary bash script is created that
+The **schedule-tests.sh** bash script identifies all test scripts in
+a specific FieldTrip directory. For each test script, a temporary bash
+script is created that
 
 1. prints some diagnostic information
 2. starts MATLAB with the specific FT function to test, wrapped in xUnit
@@ -50,9 +50,9 @@ The **schedule-tests.sh** bash script identifies all test scripts in a specific 
 
 Upon job completion, the stdout/stderr files are copied from the compute node. The stdoud log file contains either the string "PASSED" or "FAILED" and can be parsed
 
-The scheduling of the jobs (on the basis of new revisions),
-the parsing of the log files, and the reporting on the wiki
-and through email were all part of the dashboard code. With the
-recent migration from SVN to Git, these aspects of the dashboard
-have become defunct and will have to be reimplemented. See
+The scheduling of the jobs (on the basis of new revisions), the
+parsing of the log files, and the reporting on the wiki and through
+email were all part of a previous implementation of the dashboard
+code. With the recent migration from SVN to Git, these aspects of the
+dashboard have become defunct and will have to be reimplemented. See
 http://bugzilla.fieldtriptoolbox.org/show_bug.cgi?id=3066
