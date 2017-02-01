@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 #
-# This script takes a fieldtrip revision and schedules all tests that are in that revision for execution on torque.
+# This script takes a FieldTrip revision and schedules all tests in that
+# revision for execution on the torque compute cluster.
 #
 # Use as either one of these
-#  schedule-tests.sh <FIELDTRIPDIR> <LOGDIR> <MATLABCMD>
-#  schedule-tests.sh <FIELDTRIPDIR> <LOGDIR>
-#  schedule-tests.sh <FIELDTRIPDIR>
+#   schedule-tests.sh <FIELDTRIPDIR> <LOGDIR> <MATLABCMD>
+#   schedule-tests.sh <FIELDTRIPDIR> <LOGDIR>
+#   schedule-tests.sh <FIELDTRIPDIR>
 #
 
 set -u -e  # exit on error or if variable is unset

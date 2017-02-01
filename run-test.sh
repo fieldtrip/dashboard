@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 #
-# This script creates and executes a temporary matlab script for a specific revision and specific test.
+# This script creates a temporary matlab script for a specific test and
+# a specific FieldTrip revision, starts MATLAB and executes the temporary
+# script.
 #
-# Use as
-#  run-test.sh <TESTSCRIPT> <FIELDTRIPDIR> <LOGDIR> <MATLABCMD>
-#  run-test.sh <TESTSCRIPT> <FIELDTRIPDIR> <LOGDIR>
-#  run-test.sh <TESTSCRIPT> <FIELDTRIPDIR>
-#  run-test.sh <TESTSCRIPT>
+# Use as either one of these
+#   run-test.sh <TESTSCRIPT> <FIELDTRIPDIR> <LOGDIR> <MATLABCMD>
+#   run-test.sh <TESTSCRIPT> <FIELDTRIPDIR> <LOGDIR>
+#   run-test.sh <TESTSCRIPT> <FIELDTRIPDIR>
+#   run-test.sh <TESTSCRIPT>
 #
-# It is executed by schedule-test.sh
+# This script is scheduled for execution on the torque cluster by schedule-test.sh
 
 source /opt/optenv.sh
 module load openmeeg
