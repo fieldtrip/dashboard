@@ -68,7 +68,9 @@ BASHSCRIPT=`mktemp $LOGDIR/test_XXXXXXXX.sh`
 cat > $BASHSCRIPT <<EOF
 #!/usr/bin/env bash
 #
-# This should be called as
+% This BASH script will be automatically removed when the job has been scheduled.
+#
+# The script to start MATLAB and execute the specific test should be called as
 #   run-test.sh <TESTSCRIPT> <FIELDTRIPDIR> <LOGDIR> <MATLABCMD>
 #
 $DASHBOARDDIR/run-test.sh $TEST $FIELDTRIPDIR $LOGDIR \'$MATLABCMD\'

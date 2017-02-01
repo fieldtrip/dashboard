@@ -53,6 +53,8 @@ TEST=`basename $TESTSCRIPT .m`
 MATLABSCRIPT=`mktemp $LOGDIR/test_XXXXXXXX.m`
 cat > $MATLABSCRIPT <<EOF
 %-------------------------------------------------------------------------------
+% this MATLAB script will be automatically removed when execution has finished
+
 try
 
   restoredefaultpath
