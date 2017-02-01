@@ -25,10 +25,18 @@ else
 FIELDTRIPDIR=$HOME/matlab/fieldtrip
 fi
 
+DASHBOARDDIR=$(dirname $(readlink -f $0))
+REVISION=$(cd ~/matlab/fieldtrip && git rev-parse --short HEAD)
+
 if [ "$#" -ge 3 ]; then
 LOGDIR=$3
+mkdir -p $LOGDIR
 else
-LOGDIR=$HOME/`date +'%FT%H:%M:%S'`
+# LOGDIR=$HOME/`date +'%FT%H:%M:%S'`
+LOGDIR=$DASHBOARDDIR/logs/$REVISION
+mkdir -p $LOGDIR
+rm $DASHBOARDDIR/logs/latest
+ln -s $LOGDIR $DASHBOARDDIR/logs/latest
 fi
 
 if [ "$#" -ge 4 ]; then
@@ -44,8 +52,6 @@ XUNIT=`readlink -f $HOME/matlab/xunit-octave`
 else
 >&2 echo Error: unknown MATLABCMD $MATLABCMD
 fi
-
-mkdir -p $LOGDIR
 
 # the FieldTrip test script test to be executed is passed with the full path
 TESTDIR=`dirname $TESTSCRIPT`

@@ -8,6 +8,9 @@
 #   schedule-tests.sh <FIELDTRIPDIR> <LOGDIR>
 #   schedule-tests.sh <FIELDTRIPDIR>
 #
+# Ideas for improvement
+#   use git rev-parse --short HEAD for the LOGDIR
+#
 
 set -u -e  # exit on error or if variable is unset
 
@@ -17,10 +20,14 @@ else
 FIELDTRIPDIR=$HOME/matlab/fieldtrip
 fi
 
+DASHBOARDDIR=$(dirname $(readlink -f $0))
+REVISION=$(cd ~/matlab/fieldtrip && git rev-parse --short HEAD)
+
 if [ "$#" -ge 2 ]; then
 LOGDIR=$2
 else
-LOGDIR=$HOME/`date +'%FT%H:%M:%S'`
+# LOGDIR=$HOME/`date +'%FT%H:%M:%S'`
+LOGDIR=$DASHBOARDDIR/logs/$REVISION
 fi
 
 if [ "$#" -ge 3 ]; then
@@ -44,7 +51,6 @@ else
 >&2 echo Error: unknown MATLABCMD $MATLABCMD
 fi
 
-DASHBOARDDIR=$(dirname $(readlink -f $0))
 mkdir -p $LOGDIR
 
 for TEST in `find $FIELDTRIPDIR -path "*test/test_*.m"` ; do
