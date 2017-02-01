@@ -28,9 +28,9 @@ test results.
 - the summary of results is displayed in a dashboard-like fasion
 
 ## What is being tested
-MATLAB scripts in subdirectories ending with 'test' in the FieldTrip
-repository. All test scripts (or more precisely: test functions) should
-run through without errors, or should throw a MATLAB error.
+MATLAB scripts with the name test_xxx.m that are located in 'test'
+subdirectories in the FieldTrip repository. All test scripts should run
+through without errors, or should throw a MATLAB error.
 
 ## Requirements
 To run the tests, of course a MATLAB or Octave installation is needed. The
@@ -43,16 +43,12 @@ a specific FieldTrip directory. For each test script, a temporary bash
 script is created that
 
 1. prints some diagnostic information
-2. starts MATLAB with the specific FT function to test, wrapped in xUnit
+2. starts MATLAB with the specific FT function to test
 3. prints some diagnostic information
 4. this bash script is scheduled to be executed on the Torque cluster
 5. MATLAB starts on a compute node and writes log information to screen, which is captured in stdout/stderr
 
-Upon job completion, the stdout/stderr files are copied from the compute node. The stdoud log file contains either the string "PASSED" or "FAILED" and can be parsed
+Upon job completion, the stdout/stderr files are copied from the compute
+node. The stdoud log file contains either the string "PASSED" or "FAILED"
+and can be parsed
 
-The scheduling of the jobs (on the basis of new revisions), the
-parsing of the log files, and the reporting on the wiki and through
-email were all part of a previous implementation of the dashboard
-code. With the recent migration from SVN to Git, these aspects of the
-dashboard have become defunct and will have to be reimplemented. See
-http://bugzilla.fieldtriptoolbox.org/show_bug.cgi?id=3066

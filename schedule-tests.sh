@@ -10,11 +10,17 @@
 
 set -u -e  # exit on error or if variable is unset
 
-TEMPDIR=$HOME/`date +'%FT%H:%M:%S'`
+if [ "$#" -ge 1 ]; then
+FIELDTRIPDIR=$1
+else
+FIELDTRIPDIR=$HOME/matlab/fieldtrip
+fi
 
-DASHBOARDDIR=`readlink -e $(dirname $0)`
-FIELDTRIPDIR=${1:-${HOME}/matlab/fieldtrip}
-LOGDIR=${2:-${TEMPDIR}}
+if [ "$#" -ge 2 ]; then
+LOGDIR=$2
+else
+LOGDIR=$HOME/`date +'%FT%H:%M:%S'`
+fi
 
 if [ "$#" -ge 3 ]; then
 MATLABCMD=$3 
@@ -37,6 +43,7 @@ else
 >&2 echo Error: unknown MATLABCMD $MATLABCMD
 fi
 
+DASHBOARDDIR=$(dirname $(readlink -f $0))
 mkdir -p $LOGDIR
 
 for TEST in `find $FIELDTRIPDIR -path "*test/test_*.m"` ; do
@@ -51,16 +58,20 @@ for TEST in `find $FIELDTRIPDIR -path "*test/test_*.m"` ; do
   if [ -z "$WALLTIME" ] ; then WALLTIME="23:59:00" ; fi
   if [ -z "$MEM" ] ; then MEM="16gb" ; fi
 
-  # temporary override
+  # the following lines allow for a temporary override
   # WALLTIME=23:59:00
   # MEM=8gb
 
 # Create temp file for job submission with so-called "here document":
-TESTSCRIPT=`mktemp $HOME/fieldtrip/dashboard/scripts/test_XXXXXXXX.sh`
+BASHSCRIPT=`mktemp $LOGDIR/test_XXXXXXXX.sh`
 # ---------------------------------------------------------------------------
-cat > $TESTSCRIPT <<EOF
+cat > $BASHSCRIPT <<EOF
 #!/usr/bin/env bash
-$DASHBOARDDIR/run-test.sh $FIELDTRIPDIR $TEST \'$MATLABCMD\'
+#
+# This should be called as
+#   run-test.sh <TESTSCRIPT> <FIELDTRIPDIR> <LOGDIR> <MATLABCMD>
+#
+$DASHBOARDDIR/run-test.sh $TEST $FIELDTRIPDIR $LOGDIR \'$MATLABCMD\'
 EOF
 # ---------------------------------------------------------------------------
 
@@ -69,9 +80,9 @@ EOF
   TESTNAME=${TESTNAME##*/}
 
   # run test job on Torque
-  $QSUB -l walltime=$WALLTIME,mem=$MEM -N $TESTNAME -o $LOGDIR/$TESTNAME.txt -e $LOGDIR/$TESTNAME.err $TESTSCRIPT
+  $QSUB -l walltime=$WALLTIME,mem=$MEM -N $TESTNAME -o $LOGDIR/$TESTNAME.txt -e $LOGDIR/$TESTNAME.err $BASHSCRIPT
 
   # remove temp file again
-  rm $TESTSCRIPT  
+  rm $BASHSCRIPT  
 done
 
