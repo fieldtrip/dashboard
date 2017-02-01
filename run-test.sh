@@ -12,8 +12,12 @@
 #
 # This script is scheduled for execution on the torque cluster by schedule-test.sh
 
+# optenv does not load modules when executed as PBS job
 source /opt/optenv.sh
+
 module load openmeeg
+module load cluster
+module load fsl
 
 set -u -e  # exit on error or if variable is unset
 
