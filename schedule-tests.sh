@@ -28,6 +28,7 @@ LOGDIR=$2
 else
 # LOGDIR=$HOME/`date +'%FT%H:%M:%S'`
 LOGDIR=$DASHBOARDDIR/logs/$REVISION
+(cd $DASHBOARDDIR/logs && rm -rf latest && ln -s $REVISION latest)
 fi
 
 if [ "$#" -ge 3 ]; then
