@@ -21,7 +21,7 @@ FIELDTRIPDIR=$HOME/matlab/fieldtrip
 fi
 
 DASHBOARDDIR=$(dirname $(readlink -f $0))
-REVISION=$(cd ~/matlab/fieldtrip && git rev-parse --short HEAD)
+REVISION=$(cd $FIELDTRIPDIR && git rev-parse --short HEAD)
 
 if [ "$#" -ge 2 ]; then
 LOGDIR=$2
