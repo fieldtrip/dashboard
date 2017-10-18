@@ -38,7 +38,8 @@ MATLABCMD="/opt/matlab/R2016b/bin/matlab -nodesktop -nosplash -nodisplay -single
 fi
 
 if [[ $MATLABCMD == *"matlab"* ]]; then
-QSUB="qsub -q matlab"
+QSUB="$HOME/bin/qsub -q matlab"
+# QSUB="qsub -q matlab"
 # QSUB="qsub -q matlab -l nodes=dccn-c019.dccn.nl,nodes=dccn-c020.dccn.nl"
 # QSUB="qsub -q matlab -l nodes=1:ppn=8,nodes=dccn-c006.dccn.nl,nodes=dccn-c007.dccn.nl,nodes=dccn-c019.dccn.nl,nodes=dccn-c020.dccn.nl,nodes=dccn-c021.dccn.nl,nodes=dccn-c027.dccn.nl,nodes=dccn-c028.dccn.nl,nodes=dccn-c033.dccn.nl,nodes=dccn-c034.dccn.nl"
 # QSUB="qsub -q matlab -l nodes=1:ppn=8"
