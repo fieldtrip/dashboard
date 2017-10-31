@@ -76,6 +76,10 @@ try
   ft_defaults
   global ft_default
   ft_default = [];
+  ft_default.feedback = 'no';
+  ft_default.checkconfig = 'loose';
+  ft_default.trackusage = 'no';
+  % ft_default.trackconfig = 'no';
 
   cd $TESTDIR
   ft_test run $TEST
