@@ -8,9 +8,6 @@
 #   schedule-tests.sh <FIELDTRIPDIR> <LOGDIR>
 #   schedule-tests.sh <FIELDTRIPDIR>
 #
-# Ideas for improvement
-#   use git rev-parse --short HEAD for the LOGDIR
-#
 
 set -u -e  # exit on error or if variable is unset
 

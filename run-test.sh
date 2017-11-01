@@ -46,7 +46,7 @@ fi
 if [ "$#" -ge 4 ]; then
 MATLABCMD=$4
 else
-MATLABCMD="/opt/matlab/R2016b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread"
+MATLABCMD="/opt/matlab/R2017b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread"
 fi
 
 if [[ $MATLABCMD == *"matlab"* ]]; then
@@ -73,13 +73,14 @@ try
   addpath $FIELDTRIPDIR 
   addpath $FIELDTRIPDIR/test  % for dccnpath
 
-  ft_defaults
   global ft_default
   ft_default = [];
   ft_default.feedback = 'no';
   ft_default.checkconfig = 'loose';
   ft_default.trackusage = 'no';
   % ft_default.trackconfig = 'no';
+
+  ft_defaults
 
   cd $TESTDIR
   ft_test run $TEST
