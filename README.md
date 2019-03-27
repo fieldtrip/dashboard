@@ -50,5 +50,6 @@ script is created that
 
 Upon job completion, the stdout/stderr files are copied from the compute
 node. The stdoud log file contains either the string "PASSED" or "FAILED"
-and can be parsed
+and and is parsed. Every morning the main developers receive a summary of
+the "FAILED" scripts by email. 
 
