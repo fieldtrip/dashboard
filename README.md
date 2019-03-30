@@ -28,8 +28,12 @@ specific FieldTrip function.
 
 ## How it works
 
-The **schedule-tests.sh** script identifies all test scripts. For each test
-script, a temporary Bash script is created.
+The `run-test.sh` script executes a single test in MATLAB. The
+`schedule-tests.sh` script runs all test scripts for a single version of MATLAB.
+The `schedule-matlabs.sh` script runs all test scripts for all versions of
+MATLAB.
+
+The general procedure is that for each test script a temporary Bash script is created.
 
 1. the Bash script is scheduled for execution on the DCCN cluster
 2. it creates a temporary MATLAB script that sets the path, prints some diagnostics and runs the specific test in a try-catch statement
@@ -37,9 +41,10 @@ script, a temporary Bash script is created.
 4. if an error is detected it will print "FAILED", otherwise it prints "PASSED"
 5. the output is captured in stdout/stderr files
 
-The stdout/stderr output of all jobs is collected in a log file directory. The
-log files are parsed using a cron job and the developers receive an email with
-the summary of the "FAILED" scripts.
+When running the whole batch of test scripts, the stdout/stderr output of all
+jobs is collected in a log file directory. The collection of log files are
+parsed using a cron job and the developers receive an email with the summary of
+the "FAILED" scripts.
 
 ## Dashboard database
 
