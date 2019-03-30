@@ -1,55 +1,61 @@
-# FieldTrip - Dashboard for automated testing and quality control
+# FieldTrip dashboard
 
-## Abstract
-The purpose of dashboard is to provide rapid feedback to FieldTrip developers on
-the quality of their commits as indicated by passing and failing test scripts.
-As such, it is important to provide the results shortly after a commit.
-Further, the developers have to be notified if their change causes failing
-tests, and report of the test results should be easily accessible.
+This repository contains the code we use for testing the FieldTrip code base.
+The aim is to provide rapid feedback to developers on the quality of their
+commits.
 
+### Design considerations
 
-## Considerations
-Some tests (e.g. `ft_connectivity_tutorial.m`) take a long time to complete.
-This hinders rapid testing. One approach is to test with a job scheduler on a
-computing cluster, the other is to disable slow tests, and allow for testing on
-other platforms as well (e.g. Windows).
-
-Since the aim is to support developers with reliable information, the test
-results should be as accurate as possible. If historical results are to be
-provided, this means *that all the test have to be run for every revision*.
-Although a triggering mechanism exists to trigger relevant tests, a failure in
-the detection of the dependencies might cause misinformation presented in the
-test results.
-
-
-### Design requirements
-- all tests can be run for every revision
-- all tests can be run for different MATLAB and Octave versions
-- the summary of results is displayed in a dashboard-like fasion
+- test scripts should be easy to contribute by users
+- some tests are fast, whereas others take a long time to run
+- some tests require the loading of (non-shared) data on disk
+- test scripts should be easy to execute by developers and users alike
+- test results should be provided shortly after a GitHub commit
+- all tests can be executed for every revision and/or branch
+- all tests can be executed for different MATLAB and Octave versions
+- all tests can be executed for different operating systems
+- the dashboard scripts are designed to run on the DCCN compute cluster
 
 ## What is being tested
-MATLAB scripts with the name test_xxx.m that are located in 'test'
-subdirectories in the FieldTrip repository. All test scripts should run
-through without errors, or should throw a MATLAB error.
 
-## Requirements
-To run the tests, of course a MATLAB or Octave installation is needed. The
-dashboard scripts are designed to run on the DCCN mentat cluster, and
-the scripts assume a Unix/Linux environment.
+All MATLAB scripts (technically functions) with the name test_xxx.m that are
+located in the `fieldtrip/test` directory are considered for execution. Test
+scripts must indicate on the _WALLTIME_ and _MEM_ lines what their requirements
+are for execution on the DCCN cluster. Test scripts may indicate on the
+_DEPENDENCY_ line on which FieldTrip functions they specifically depend. This
+allows filtering the test scripts to find the relevant ones upon a change to a
+specific FieldTrip function.
 
 ## How it works
-The **schedule-tests.sh** bash script identifies all test scripts in
-a specific FieldTrip directory. For each test script, a temporary bash
-script is created that
 
-1. prints some diagnostic information
-2. starts MATLAB with the specific FT function to test
-3. prints some diagnostic information
-4. this bash script is scheduled to be executed on the Torque cluster
-5. MATLAB starts on a compute node and writes log information to screen, which is captured in stdout/stderr
+The **schedule-tests.sh** script identifies all test scripts. For each test
+script, a temporary Bash script is created.
 
-Upon job completion, the stdout/stderr files are copied from the compute
-node. The stdoud log file contains either the string "PASSED" or "FAILED"
-and and is parsed. Every morning the main developers receive a summary of
-the "FAILED" scripts by email. 
+4. the Bash script is scheduled for execution on the DCCN cluster
+5. it creates a temporary MATLAB script that sets the path, prints some diagnostics and runs the specific test in a try-catch statement
+6. it starts MATLAB with that temporary MATLAB script
+7. if an error is detected it will print "FAILED", otherwise it prints "PASSED"
+8. the output is captured in stdout/stderr files
 
+The stdout/stderr output of all jobs is collected in a log file directory. The
+log files are parsed using a cron job and the developers receive an email with
+the summary of the "FAILED" scripts.
+
+## Dashboard database
+
+The dashboard in principle only requires MATLAB scripts (technically functions)
+for execution, which can also easily be executed on the MATLAB command line to
+test manually.
+
+To provide better summaries of test results on different versions of MATLAB,
+different operating systems, and different FieldTrip versions, we capture the
+results in a dashboard database. This happens automatically by executing the
+test script (technically function) with the `ft_test` function. The results of
+all tests can be queried using `ft_test`, returning a table that shows all
+details.
+
+Using the dashboard scripts, all test scripts will be executed. On the MATLAB
+command line the `ft_test` function can be used run all tests, to select
+specific tests based on requirements (files on disk, memory, walltime,
+dependencies), or to select a single test. In all cases the results will be
+written to the dashboard database.
