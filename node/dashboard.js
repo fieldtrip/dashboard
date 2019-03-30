@@ -11,6 +11,8 @@ app.use(bodyParser.json());
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 var db;
 
+// this requires that you source the environment variables from secret.sh
+
 var COLLECTION = process.env.MONGODB_COLLECTION;
 var URI = process.env.MONGODB_URI;
 var SECRET = process.env.DASHBOARD_SECRET;
@@ -21,7 +23,7 @@ if (typeof COLLECTION == 'undefined') {
   process.exit(1);
 }
 
-// Connect to the database before starting the application server. 
+// Connect to the database before starting the application server.
 mongodb.MongoClient.connect(URI, function (err, database) {
   if (err) {
     console.log(err);
