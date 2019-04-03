@@ -46,7 +46,7 @@ fi
 if [ "$#" -ge 4 ]; then
 MATLABCMD=$4
 else
-MATLABCMD="/opt/matlab/R2017b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread"
+MATLABCMD="/opt/matlab/R2018b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread"
 fi
 
 if [[ $MATLABCMD == *"matlab"* ]]; then

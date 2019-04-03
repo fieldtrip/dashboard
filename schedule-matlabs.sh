@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 #
-# This script takes the FieldTrip version from my home directory and runs all tests on it for different MATLAB versions.
+# This script takes the current FieldTrip version from my home directory and runs all tests on it for different MATLAB versions.
 #
 
 FIELDTRIPDIR=$HOME/matlab/fieldtrip
 REV=`cd $FIELDTRIPDIR && git rev-parse --short HEAD`
+./schedule-tests.sh ${FIELDTRIPDIR} /home/mrphys/roboos/fieldtrip/dashboard/logs/${REV}-R2018b '/opt/matlab/R2018b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
+./schedule-tests.sh ${FIELDTRIPDIR} /home/mrphys/roboos/fieldtrip/dashboard/logs/${REV}-R2018a '/opt/matlab/R2018a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-tests.sh ${FIELDTRIPDIR} /home/mrphys/roboos/fieldtrip/dashboard/logs/${REV}-R2017b '/opt/matlab/R2017b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-tests.sh ${FIELDTRIPDIR} /home/mrphys/roboos/fieldtrip/dashboard/logs/${REV}-R2017a '/opt/matlab/R2017a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-tests.sh ${FIELDTRIPDIR} /home/mrphys/roboos/fieldtrip/dashboard/logs/${REV}-R2016b '/opt/matlab/R2016b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
@@ -23,4 +25,3 @@ REV=`cd $FIELDTRIPDIR && git rev-parse --short HEAD`
 ./schedule-tests.sh ${FIELDTRIPDIR} /home/mrphys/roboos/fieldtrip/dashboard/logs/${REV}-R2010a '/opt/matlab/R2010a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-tests.sh ${FIELDTRIPDIR} /home/mrphys/roboos/fieldtrip/dashboard/logs/${REV}-R2009b '/opt/matlab/R2009b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-tests.sh ${FIELDTRIPDIR} /home/mrphys/roboos/fieldtrip/dashboard/logs/${REV}-R2009a '/opt/matlab/R2009a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
-./schedule-tests.sh ${FIELDTRIPDIR} /home/mrphys/roboos/fieldtrip/dashboard/logs/${REV}-R2008b '/opt/matlab/R2008b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
