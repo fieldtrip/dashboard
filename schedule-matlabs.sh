@@ -5,6 +5,7 @@
 
 FIELDTRIPDIR=$HOME/matlab/fieldtrip
 REV=`cd $FIELDTRIPDIR && git rev-parse --short HEAD`
+./schedule-tests.sh ${FIELDTRIPDIR} /home/mrphys/roboos/fieldtrip/dashboard/logs/${REV}-R2019a '/opt/matlab/R2019a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-tests.sh ${FIELDTRIPDIR} /home/mrphys/roboos/fieldtrip/dashboard/logs/${REV}-R2018b '/opt/matlab/R2018b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-tests.sh ${FIELDTRIPDIR} /home/mrphys/roboos/fieldtrip/dashboard/logs/${REV}-R2018a '/opt/matlab/R2018a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-tests.sh ${FIELDTRIPDIR} /home/mrphys/roboos/fieldtrip/dashboard/logs/${REV}-R2017b '/opt/matlab/R2017b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
