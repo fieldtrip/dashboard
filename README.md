@@ -29,7 +29,7 @@ specific FieldTrip function.
 ## How it works
 
 The `run-test.sh` script executes a single test in MATLAB. The
-`schedule-tests.sh` script runs all test scripts for a single version of MATLAB.
+`schedule-batch.sh` script runs all test scripts for a single version of MATLAB.
 The `schedule-matlabs.sh` script runs all test scripts for all versions of
 MATLAB.
 

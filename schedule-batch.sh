@@ -52,6 +52,9 @@ fi
 
 mkdir -p $LOGDIR
 
+# keep track of all the jobs that are in this batch
+rm -rf $LOGDIR/batch
+
 for TEST in `find $FIELDTRIPDIR -path "*test/test_*.m"` ; do
 
   # this should be formatted in the matlab files as
@@ -88,9 +91,28 @@ EOF
   TESTNAME=${TESTNAME##*/}
 
   # run test job on Torque
-  $QSUB -l walltime=$WALLTIME,mem=$MEM -N $TESTNAME -o $LOGDIR/$TESTNAME.txt -e $LOGDIR/$TESTNAME.err $BASHSCRIPT
+  job=$($QSUB -l walltime=$WALLTIME,mem=$MEM -N $TESTNAME -o $LOGDIR/$TESTNAME.txt -e $LOGDIR/$TESTNAME.err $BASHSCRIPT)
+  echo $job >> $LOGDIR/batch
 
   # remove temp file again
   rm $BASHSCRIPT  
 done
+
+# Create temp file for job submission with so-called "here document":
+BASHSCRIPT=`mktemp $LOGDIR/test_XXXXXXXX.sh`
+DEPEND=`paste -s -d : $LOGDIR/batch`
+# ---------------------------------------------------------------------------
+cat > $BASHSCRIPT <<EOF
+#!/usr/bin/env bash
+#
+#PBS -l mem=100mb,walltime=00:05:00
+#PBS -W depend=afterok:$DEPEND
+#PBS -N run-final
+#PBS -o $LOGDIR/run-final.txt -e $LOGDIR/run-final.err
+$DASHBOARDDIR/run-final.sh $REVISION $LOGDIR
+EOF
+# ---------------------------------------------------------------------------
+$QSUB $BASHSCRIPT
+rm $BASHSCRIPT
+
 
