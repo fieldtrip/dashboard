@@ -4,7 +4,8 @@
 #
 
 REVISION=$1
-LOGDIR=$2
+DASHBOARDDIR=$(dirname $(readlink -f $0))
+LOGDIR=$DASHBOARDDIR/logs/$REVISION
 
 # make it robust for running as a cron job
 GREP=/usr/bin/grep
@@ -14,5 +15,6 @@ LS=/usr/bin/ls
 # run this one directory up from the actual revision results
 # this includes the revision in the email
 cd $LOGDIR/..
-$GREP FAILED $REVISION/*.txt | mail -r r.oostenveld@donders.ru.nl -s "FAILED test in latest FieldTrip batch" r.oostenveld@donders.ru.nl
+$GREP FAILED $REVISION/*.txt | mail -r r.oostenveld@donders.ru.nl -s "FAILED tests in latest FieldTrip batch" r.oostenveld@donders.ru.nl
+$GREP PASSED $REVISION/*.txt | mail -r r.oostenveld@donders.ru.nl -s "PASSED tests in latest FieldTrip batch" r.oostenveld@donders.ru.nl
 

@@ -4,9 +4,9 @@
 # revision for execution on the torque compute cluster.
 #
 # Use as either one of these
-#   schedule-tests.sh <FIELDTRIPDIR> <LOGDIR> <MATLABCMD>
-#   schedule-tests.sh <FIELDTRIPDIR> <LOGDIR>
-#   schedule-tests.sh <FIELDTRIPDIR>
+#   schedule-batch.sh <FIELDTRIPDIR> <LOGDIR> <MATLABCMD>
+#   schedule-batch.sh <FIELDTRIPDIR> <LOGDIR>
+#   schedule-batch.sh <FIELDTRIPDIR>
 #
 
 set -u -e  # exit on error or if variable is unset
@@ -91,7 +91,7 @@ EOF
   TESTNAME=${TESTNAME##*/}
 
   # run test job on Torque
-  job=$($QSUB -l walltime=$WALLTIME,mem=$MEM -N $TESTNAME -o $LOGDIR/$TESTNAME.txt -e $LOGDIR/$TESTNAME.err $BASHSCRIPT)
+  job=$($QSUB -h -l walltime=$WALLTIME,mem=$MEM -N $TESTNAME -o $LOGDIR/$TESTNAME.txt -e $LOGDIR/$TESTNAME.err $BASHSCRIPT)
   echo $job >> $LOGDIR/batch
 
   # remove temp file again
@@ -106,13 +106,15 @@ cat > $BASHSCRIPT <<EOF
 #!/usr/bin/env bash
 #
 #PBS -l mem=100mb,walltime=00:05:00
-#PBS -W depend=afterok:$DEPEND
+#PBS -W depend=afterany:$DEPEND
 #PBS -N run-final
 #PBS -o $LOGDIR/run-final.txt -e $LOGDIR/run-final.err
-$DASHBOARDDIR/run-final.sh $REVISION $LOGDIR
+
+$DASHBOARDDIR/run-final.sh $REVISION
 EOF
 # ---------------------------------------------------------------------------
-$QSUB $BASHSCRIPT
+$QSUB $BASHSCRIPT || echo FAILED to submit run-final
 rm $BASHSCRIPT
 
+for job in `cat $LOGDIR/batch` ; do qrls $job ; done
 
