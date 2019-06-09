@@ -105,15 +105,15 @@ DEPEND=`paste -s -d : $LOGDIR/batch`
 cat > $BASHSCRIPT <<EOF
 #!/usr/bin/env bash
 #
-#PBS -l mem=100mb,walltime=00:05:00
+#PBS -l mem=250mb,walltime=00:10:00
 #PBS -W depend=afterany:$DEPEND
-#PBS -N run-final
-#PBS -o $LOGDIR/run-final.txt -e $LOGDIR/run-final.err
+#PBS -N run-finished
+#PBS -o $LOGDIR/run-finished.txt -e $LOGDIR/run-finished.err
 
-$DASHBOARDDIR/run-final.sh $REVISION
+$DASHBOARDDIR/run-finished.sh $REVISION
 EOF
 # ---------------------------------------------------------------------------
-$QSUB $BASHSCRIPT || echo FAILED to submit run-final
+$QSUB $BASHSCRIPT || echo FAILED to submit run-finished
 rm $BASHSCRIPT
 
 for job in `cat $LOGDIR/batch` ; do qrls $job ; done
