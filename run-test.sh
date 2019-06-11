@@ -22,6 +22,7 @@ module load fsl
 
 set -u -e  # exit on error or if variable is unset
 
+DASHBOARDDIR=$(dirname $(readlink -f $0))
 TESTSCRIPT=`readlink -f $1`
 
 if [ "$#" -ge 2 ]; then
@@ -30,19 +31,17 @@ else
 FIELDTRIPDIR=$HOME/matlab/fieldtrip
 fi
 
-DASHBOARDDIR=$(dirname $(readlink -f $0))
-REVISION=$(cd ~/matlab/fieldtrip && git rev-parse --short HEAD)
+REVISION=$(cd $FIELDTRIPDIR && git rev-parse --short HEAD)
 
 if [ "$#" -ge 3 ]; then
 LOGDIR=$3
-mkdir -p $LOGDIR
 else
-# LOGDIR=$HOME/`date +'%FT%H:%M:%S'`
 LOGDIR=$DASHBOARDDIR/logs/$REVISION
+fi
+
 mkdir -p $LOGDIR
 rm $DASHBOARDDIR/logs/latest
 ln -s $LOGDIR $DASHBOARDDIR/logs/latest
-fi
 
 if [ "$#" -ge 4 ]; then
 MATLABCMD=$4
