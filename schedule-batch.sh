@@ -29,7 +29,7 @@ LOGDIR=$DASHBOARDDIR/logs/$REVISION
 fi
 
 if [ "$#" -ge 3 ]; then
-MATLABCMD=$3 
+MATLABCMD=$3
 else
 MATLABCMD="/opt/matlab/R2016b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread"
 fi
@@ -95,7 +95,7 @@ EOF
   echo $job >> $LOGDIR/batch
 
   # remove temp file again
-  rm $BASHSCRIPT  
+  rm $BASHSCRIPT
 done
 
 # Create temp file for job submission with so-called "here document":
@@ -117,4 +117,3 @@ $QSUB $BASHSCRIPT || echo FAILED to submit run-finished
 rm $BASHSCRIPT
 
 for job in `cat $LOGDIR/batch` ; do qrls $job ; done
-

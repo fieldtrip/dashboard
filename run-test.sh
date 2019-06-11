@@ -10,7 +10,8 @@
 #   run-test.sh <TESTSCRIPT> <FIELDTRIPDIR>
 #   run-test.sh <TESTSCRIPT>
 #
-# This script is scheduled for execution on the torque cluster by schedule-test.sh
+# This script is scheduled for execution on the torque cluster by schedule-batch.sh
+#
 
 # optenv does not load modules when executed as PBS job
 source /opt/optenv.sh
@@ -70,7 +71,7 @@ cat > $MATLABSCRIPT <<EOF
 try
 
   restoredefaultpath
-  addpath $FIELDTRIPDIR 
+  addpath $FIELDTRIPDIR
   addpath $FIELDTRIPDIR/test  % for dccnpath
 
   global ft_default
@@ -108,4 +109,3 @@ fi
 
 # remove the temp file, not the actual FieldTrip test script
 rm $MATLABSCRIPT
-
