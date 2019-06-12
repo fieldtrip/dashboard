@@ -107,13 +107,14 @@ cat > $BASHSCRIPT <<EOF
 #
 #PBS -l mem=250mb,walltime=00:10:00
 #PBS -W depend=afterany:$DEPEND
-#PBS -N run-finished
-#PBS -o $LOGDIR/run-finished.txt -e $LOGDIR/run-finished.err
+#PBS -N run-release
+#PBS -o $LOGDIR/run-release.txt -e $LOGDIR/run-release.err
 
-$DASHBOARDDIR/run-finished.sh $REVISION
+$DASHBOARDDIR/run-release.sh $REVISION
 EOF
 # ---------------------------------------------------------------------------
-$QSUB $BASHSCRIPT || echo FAILED to submit run-finished
+$QSUB $BASHSCRIPT || echo FAILED to submit run-release
 rm $BASHSCRIPT
 
 for job in `cat $LOGDIR/batch` ; do qrls $job ; done
+
