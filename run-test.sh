@@ -31,17 +31,13 @@ else
 FIELDTRIPDIR=$HOME/matlab/fieldtrip
 fi
 
-REVISION=$(cd $FIELDTRIPDIR && git rev-parse --short HEAD)
 
 if [ "$#" -ge 3 ]; then
 LOGDIR=$3
 else
+REVISION=$(cd $FIELDTRIPDIR && git rev-parse --short HEAD)
 LOGDIR=$DASHBOARDDIR/logs/$REVISION
 fi
-
-mkdir -p $LOGDIR
-rm $DASHBOARDDIR/logs/latest
-ln -s $LOGDIR $DASHBOARDDIR/logs/latest
 
 if [ "$#" -ge 4 ]; then
 MATLABCMD=$4
@@ -59,9 +55,10 @@ fi
 
 # the FieldTrip test script test to be executed is passed with the full path
 TESTDIR=`dirname $TESTSCRIPT`
-TEST=`basename $TESTSCRIPT .m`
+TESTNAME=`basename $TESTSCRIPT .m`
 
 # Create temp file for job submission with so-called "here document":
+mkdir -p $LOGDIR
 MATLABSCRIPT=`mktemp $LOGDIR/test_XXXXXXXX.m`
 cat > $MATLABSCRIPT <<EOF
 %-------------------------------------------------------------------------------
@@ -83,7 +80,7 @@ try
   ft_defaults
 
   cd $TESTDIR
-  ft_test run $TEST
+  ft_test run $TESTNAME
 
 catch err
   disp(err)

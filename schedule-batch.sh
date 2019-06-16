@@ -11,19 +11,20 @@
 
 set -u -e  # exit on error or if variable is unset
 
+DASHBOARDDIR=$(dirname $(readlink -f $0))
+
 if [ "$#" -ge 1 ]; then
 FIELDTRIPDIR=$1
 else
 FIELDTRIPDIR=$HOME/matlab/fieldtrip
 fi
 
-DASHBOARDDIR=$(dirname $(readlink -f $0))
 REVISION=$(cd $FIELDTRIPDIR && git rev-parse --short HEAD)
+BRANCH=$(cd $FIELDTRIPDIR && git rev-parse --abbrev-ref HEAD)
 
 if [ "$#" -ge 2 ]; then
 LOGDIR=$2
 else
-# LOGDIR=$HOME/`date +'%FT%H:%M:%S'`
 LOGDIR=$DASHBOARDDIR/logs/$REVISION
 (cd $DASHBOARDDIR/logs && rm -rf latest && ln -s $REVISION latest)
 fi
@@ -51,6 +52,8 @@ else
 fi
 
 mkdir -p $LOGDIR
+echo $BRANCH   > $LOGDIR/branch
+echo $REVISION > $LOGDIR/revision
 
 # keep track of all the jobs that are in this batch
 rm -rf $LOGDIR/batch

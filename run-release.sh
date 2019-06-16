@@ -24,7 +24,7 @@ REVISION=$1
 
 if [ -z "$REVISION" ] ; then
 # determine the revision of the latest version that ran
-REVISION=`$LS -al $DASHBOARDDIR/logs/latest | $AWK '{print $NF}'`
+REVISION=$(cat $DASHBOARDDIR/logs/latest/revision)
 fi
 
 # stop here if the revision cannot be determined
