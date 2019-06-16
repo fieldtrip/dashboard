@@ -4,10 +4,12 @@
 # and then merges the master with the release branch.
 #
 # Use as
-#   dashboard-release.sh
-# to test the latest revision that was executed, or
-#   dashboard-release.sh <REVISION>
+#   run-release.sh
+# to check and merge the latest revision that was executed, or
+#   run-release.sh <REVISION>
 # for a specific revision.
+#
+# This script is scheduled for execution on the torque cluster by schedule-batch.sh
 #
 
 # make it robust for running as a cron job
