@@ -37,11 +37,10 @@ BRANCH=$(cat $LOGDIR/branch)
 FAILED=$($GREP FAILED $LOGDIR/*.txt | wc -l)
 PASSED=$($GREP PASSED $LOGDIR/*.txt | wc -l)
 
-# execute grep one directory up from the actual revision results
-# this includes the revision in the email body
-cd $LOGDIR/..
-$GREP FAILED $REVISION/*.txt | $MAIL -r r.oostenveld@donders.ru.nl -s "FAILED tests in latest FieldTrip batch" r.oostenveld@donders.ru.nl
-$GREP PASSED $REVISION/*.txt | $MAIL -r r.oostenveld@donders.ru.nl -s "PASSED tests in latest FieldTrip batch" r.oostenveld@donders.ru.nl
+# execute grep one directory up from the actual revision results, this includes the revision in the email body
+# cd $LOGDIR/..
+# $GREP FAILED $REVISION/*.txt | $MAIL -r r.oostenveld@donders.ru.nl -s "FAILED tests in latest FieldTrip batch" r.oostenveld@donders.ru.nl
+# $GREP PASSED $REVISION/*.txt | $MAIL -r r.oostenveld@donders.ru.nl -s "PASSED tests in latest FieldTrip batch" r.oostenveld@donders.ru.nl
 
 if [ "$BRANCH" == "master" ]; then
 if [ $FAILED -eq 0 ]; then
