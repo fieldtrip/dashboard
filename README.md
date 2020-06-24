@@ -1,7 +1,6 @@
 # FieldTrip dashboard
 
-This repository contains the code we use for testing the FieldTrip code base.
-The aim is to provide rapid feedback to developers on the quality of their
+This repository contains the code we use for testing the FieldTrip code base using the unit and integration tests in [fieldtrip/test](https://github.com/fieldtrip/fieldtrip/tree/master/test). The aim of the dashboard is to provide rapid feedback to developers on the quality of their
 commits.
 
 ### Design considerations
@@ -19,10 +18,11 @@ commits.
 ## What is being tested
 
 All MATLAB scripts (technically functions) with the name test_xxx.m that are
-located in the `fieldtrip/test` directory are considered for execution. Test
-scripts must indicate on the _WALLTIME_ and _MEM_ lines what their requirements
-are for execution on the DCCN cluster. Test scripts may indicate on the
-_DEPENDENCY_ line on which FieldTrip functions they specifically depend. This
+located in the [fieldtrip/test](https://github.com/fieldtrip/fieldtrip/tree/master/test)
+directory are considered for execution. Test scripts must indicate on 
+the _WALLTIME_ and _MEM_ lines what their requirements are for execution 
+on the DCCN cluster. Test scripts may indicate on the _DEPENDENCY_ 
+line on which FieldTrip functions they specifically depend. This
 allows filtering the test scripts to find the relevant ones upon a change to a
 specific FieldTrip function.
 
