@@ -7,6 +7,7 @@
 #   schedule-batch.sh <FIELDTRIPDIR> <LOGDIR> <MATLABCMD>
 #   schedule-batch.sh <FIELDTRIPDIR> <LOGDIR>
 #   schedule-batch.sh <FIELDTRIPDIR>
+#   schedule-batch.sh
 #
 
 set -u -e  # exit on error or if variable is unset
@@ -32,7 +33,7 @@ fi
 if [ "$#" -ge 3 ]; then
 MATLABCMD=$3
 else
-MATLABCMD="/opt/matlab/R2016b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread"
+MATLABCMD="/opt/matlab/R2018b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread"
 fi
 
 if [[ $MATLABCMD == *"matlab"* ]]; then
