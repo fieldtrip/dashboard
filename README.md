@@ -20,8 +20,8 @@ commits.
 All MATLAB scripts (technically functions) with the name test_xxx.m that are
 located in the [fieldtrip/test](https://github.com/fieldtrip/fieldtrip/tree/master/test)
 directory are considered for execution. Test scripts must indicate on
-the _WALLTIME_ and _MEM_ lines what their requirements are for execution
-on the DCCN cluster. Test scripts may indicate on the _DEPENDENCY_
+the `WALLTIME` and `MEM` lines what their requirements are for execution
+on the DCCN cluster. Test scripts may indicate on the `DEPENDENCY`
 line on which FieldTrip functions they specifically depend. This
 allows filtering the test scripts to find the relevant ones upon a change to a
 specific FieldTrip function.
