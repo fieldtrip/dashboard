@@ -80,7 +80,7 @@ try
   ft_defaults
 
   cd $TESTDIR
-  ft_test run $TESTNAME
+  $TESTNAME
 
 catch err
   disp(err)
