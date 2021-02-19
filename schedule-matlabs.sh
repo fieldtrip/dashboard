@@ -7,6 +7,10 @@
 FIELDTRIPDIR=${HOME}/matlab/fieldtrip
 DASHBOARDDIR=${HOME}/fieldtrip/dashboard/
 REV=`cd $FIELDTRIPDIR && git rev-parse --short HEAD`
+
+./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2020b '/opt/matlab/R2020b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
+./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2020a '/opt/matlab/R2020a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
+./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2019b '/opt/matlab/R2019b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2019a '/opt/matlab/R2019a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2018b '/opt/matlab/R2018b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2018a '/opt/matlab/R2018a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
@@ -22,9 +26,11 @@ REV=`cd $FIELDTRIPDIR && git rev-parse --short HEAD`
 ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2013a '/opt/matlab/R2013a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2012b '/opt/matlab/R2012b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2012a '/opt/matlab/R2012a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
-./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2011b '/opt/matlab/R2011b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
-./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2011a '/opt/matlab/R2011a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
-./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2010b '/opt/matlab/R2010b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
-./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2010a '/opt/matlab/R2010a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
-./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2009b '/opt/matlab/R2009b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
-./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2009a '/opt/matlab/R2009a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
+
+# do not bother with these old MATLAB versions
+# ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2011b '/opt/matlab/R2011b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
+# ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2011a '/opt/matlab/R2011a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
+# ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2010b '/opt/matlab/R2010b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
+# ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2010a '/opt/matlab/R2010a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
+# ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2009b '/opt/matlab/R2009b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
+# ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2009a '/opt/matlab/R2009a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
