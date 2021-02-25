@@ -78,12 +78,15 @@ try
   % ft_default.trackconfig = 'no';
 
   ft_defaults
+  stopwatch = tic;
 
   cd $TESTDIR
   $TESTNAME
 
+  disp(sprintf('$TESTNAME PASSED in %d seconds', round(toc(stopwatch))));
 catch err
   disp(err)
+  disp(sprintf('$TESTNAME FAILED in %d seconds', round(toc(stopwatch))));
 end
 
 exit
