@@ -19,6 +19,9 @@ LS=/usr/bin/ls
 GIT=/usr/bin/git
 MAIL=/usr/bin/mail
 
+# ensure that other team members can read the results
+umask 0022
+
 TRUNK=$HOME/fieldtrip/release/fieldtrip
 DASHBOARDDIR=$HOME/fieldtrip/dashboard
 

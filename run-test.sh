@@ -22,6 +22,9 @@ module load fsl
 
 set -u -e  # exit on error or if variable is unset
 
+# ensure that other team members can read the results
+umask 0022
+
 DASHBOARDDIR=$(dirname $(readlink -f $0))
 TESTSCRIPT=`readlink -f $1`
 
