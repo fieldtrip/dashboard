@@ -8,6 +8,7 @@ FIELDTRIPDIR=${HOME}/matlab/fieldtrip
 DASHBOARDDIR=${HOME}/fieldtrip/dashboard/
 REV=`cd $FIELDTRIPDIR && git rev-parse --short HEAD`
 
+./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2021a '/opt/matlab/R2021a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2020b '/opt/matlab/R2020b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2020a '/opt/matlab/R2020a/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
 ./schedule-batch.sh ${FIELDTRIPDIR} ${DASHBOARDDIR}/logs/${REV}-R2019b '/opt/matlab/R2019b/bin/matlab -nodesktop -nosplash -nodisplay -singleCompThread'
