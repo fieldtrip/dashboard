@@ -20,10 +20,9 @@ module load openmeeg
 module load cluster
 module load fsl
 
-set -u -e  # exit on error or if variable is unset
-
-# ensure that other team members can read the results
-umask 0022
+set -u -e     # exit on error or if variable is unset
+umask 0022    # ensure that other team members can read the results
+ulimit -c 0   # disable core dumps
 
 DASHBOARDDIR=$(dirname $(readlink -f $0))
 TESTSCRIPT=`readlink -f $1`
@@ -33,7 +32,6 @@ FIELDTRIPDIR=$2
 else
 FIELDTRIPDIR=$HOME/matlab/fieldtrip
 fi
-
 
 if [ "$#" -ge 3 ]; then
 LOGDIR=$3
