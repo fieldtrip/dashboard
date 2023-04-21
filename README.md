@@ -17,7 +17,7 @@ commits.
 
 ## What is being tested
 
-All MATLAB scripts (technically functions) with the name test_xxx.m that are
+All MATLAB scripts (technically functions) with the name `test_xxx.m` that are
 located in the [fieldtrip/test](https://github.com/fieldtrip/fieldtrip/tree/master/test)
 directory are considered for execution. Test scripts must indicate on
 the `WALLTIME` and `MEM` lines what their requirements are for execution
@@ -60,6 +60,6 @@ that starts like this:
     % here comes your code, it should give an error if the test fails
     ...
 
-ALthough we refer to it as a script, technically it should be a function and hence start with the function definition on the 1st line corresponding to the m-file name. You should call it `test_xxx.m` if you want to run it automatically, or `inspect_xxx.m` if it requires visual inspection (e.g. when plotting something, or when testing a graphical user interface).
+Although we refer to it as a script, technically it should be a function and hence start with the function definition on the 1st line corresponding to the m-file name. You should call it `test_xxx.m` if you want to run it automatically, or `inspect_xxx.m` if it requires visual inspection (e.g. when plotting something, or when testing a graphical user interface).
 
-It should have three commented–out lines at the top that start with `WALLTIME`, `MEM` and `DEPENDENCY`. The wall time and memory are used to schedule the job on the compute cluster. If you know that your test runs for 30 minutes, please specify about 45 minutes, i.e. don't make it too tight. Also the memory should not be too tight. If you are not sure, just specify something on the conservative side; we can always adjust it at a later moment. The dependency list is can be used to search (e.g. using `grep`) and execute specific tests that relate to some FieldTrip function. If your new test script is critically dependent on some FieldTrip function, please add it to the list.
+It should have three commented–out lines at the top that start with `WALLTIME`, `MEM` and `DEPENDENCY`. The wall time and memory are used to schedule the job on the compute cluster. If you know that your test runs for 30 minutes, please specify about 45 minutes, i.e. don't make it too tight. Also the memory should not be too tight. If you are not sure, just specify something on the conservative side; we can always adjust it at a later moment. The dependency list can be used to search (e.g. using `grep`) and execute specific tests that relate to some FieldTrip function. If your new test script is critically dependent on some FieldTrip function, please add it to the `DEPENDENCY` list as shown in the example above for *ft_checkdata* and *ft_plot_mesh*.
