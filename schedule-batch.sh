@@ -17,6 +17,16 @@ umask 0022
 
 DASHBOARDDIR=$(dirname $(readlink -f $0))
 
+# load some bash helper functions
+source tobytes.sh
+source togb.sh
+source toseconds.sh
+source tohms.sh
+
+# this overhead is added to the job requirements
+MEMOVERHEAD=2000000000
+WALLTIMEOVERHEAD=1800
+
 if [ "$#" -ge 1 ]; then
 FIELDTRIPDIR=$1
 else
@@ -70,13 +80,21 @@ for TEST in `find $FIELDTRIPDIR -path "*test/test_*.m"` ; do
   WALLTIME=`grep WALLTIME $TEST | cut -d ' ' -f 3`
   MEM=`grep MEM $TEST | cut -d ' ' -f 3`
 
-  # set a loose mem and walltime if the matlab files do not specify them
-  if [ -z "$WALLTIME" ] ; then WALLTIME="23:59:00" ; fi
+  # set the mem and walltime if the matlab files do not specify them
+  if [ -z "$WALLTIME" ] ; then WALLTIME="12:00:00" ; fi
   if [ -z "$MEM" ] ; then MEM="16gb" ; fi
+
+  WALLTIME=$( toseconds $WALLTIME )
+  WALLTIME=$(( $WALLTIME + $WALLTIMEOVERHEAD ))
+  WALLTIME=$( tohms $WALLTIME )
+
+  MEM=$( tobytes $MEM )
+  MEM=$(( $MEM + $MEMOVERHEAD ))
+  MEM=$( togb $MEM )
 
   # the following lines allow for a temporary override
   # WALLTIME=23:59:00
-  # MEM=8gb
+  # MEM=16gb
 
 # Create temp file for job submission with so-called "here document":
 BASHSCRIPT=`mktemp $LOGDIR/test_XXXXXXXX.sh`
