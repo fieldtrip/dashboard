@@ -18,10 +18,10 @@ umask 0022
 DASHBOARDDIR=$(dirname $(readlink -f $0))
 
 # load some bash helper functions
-source tobytes.sh
-source togb.sh
-source toseconds.sh
-source tohms.sh
+source $DASHBOARDDIR/tobytes.sh
+source $DASHBOARDDIR/togb.sh
+source $DASHBOARDDIR/toseconds.sh
+source $DASHBOARDDIR/tohms.sh
 
 # this overhead is added to the job requirements
 MEMOVERHEAD=2000000000
