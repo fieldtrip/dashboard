@@ -69,7 +69,8 @@ try
 
   restoredefaultpath
   addpath $FIELDTRIPDIR
-  addpath $FIELDTRIPDIR/test  % for dccnpath
+  addpath $FIELDTRIPDIR/external/stats   % avoid using a license for pdist2 and range
+  addpath $FIELDTRIPDIR/external/signal  % avoid using a license for filtering and windowing
 
   global ft_default
   ft_default = [];
