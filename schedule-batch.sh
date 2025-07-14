@@ -139,7 +139,7 @@ cat > $BASHSCRIPT <<EOF
 #SBATCH --dependency=afterany:$DEPEND
 #SBATCH --job-name=run-release
 #SBATCH --output=$LOGDIR/run-release.txt
-#SBATCH --eror=$LOGDIR/run-release.err
+#SBATCH --error=$LOGDIR/run-release.err
 
 $DASHBOARDDIR/run-release.sh $REVISION
 EOF
