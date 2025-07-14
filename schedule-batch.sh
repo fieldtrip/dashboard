@@ -50,6 +50,10 @@ MATLABCMD="/opt/matlab/R2020a/bin/matlab -nodesktop -nosplash -nodisplay -single
 fi
 
 if [[ $MATLABCMD == *"matlab"* ]]; then
+
+# I (JM) think that on our HPC there's no matlab queue/partition anymore, just the batch partition
+SBATCH="sbatch --hold --partition=batch"
+
 QSUB="$HOME/bin/qsub -q matlab"
 # QSUB="qsub -q matlab"
 # QSUB="qsub -q matlab -l nodes=dccn-c019.dccn.nl,nodes=dccn-c020.dccn.nl"
@@ -60,7 +64,7 @@ QSUB="$HOME/bin/qsub -q matlab"
 # QSUB="qsub -q matlab -l nodes=dccn-c006.dccn.nl,nodes=nodes=dccn-c007.dccn.nl,nodes=dccn-c019.dccn.nl,nodes=dccn-c021.dccn.nl,nodes=dccn-c027.dccn.nl,nodes=dccn-c028.dccn.nl,nodes=dccn-c033.dccn.nl,nodes=dccn-c034.dccn.nl"
 # QSUB="qsub -q matlab -l nodes=1:ppn=8"
 elif [[ $MATLABCMD == *"octave"* ]]; then
-QSUB="qsub -q batch"
+SBATCH="sbatch --hold --partition=batch"
 else
 >&2 echo Error: unknown MATLABCMD $MATLABCMD
 fi
@@ -116,7 +120,7 @@ EOF
   TESTNAME=${TESTNAME##*/}
 
   # run test job on Torque
-  job=$($QSUB -h -l walltime=$WALLTIME,mem=$MEM -N $TESTNAME -o $LOGDIR/$TESTNAME.txt -e $LOGDIR/$TESTNAME.err $BASHSCRIPT)
+  job=$($SBATCH --time=$WALLTIME --mem=$MEM --job-name=$TESTNAME --output=$LOGDIR/$TESTNAME.txt --error=$LOGDIR/$TESTNAME.err $BASHSCRIPT | awk '{print $4}')
   echo $job >> $LOGDIR/batch
 
   # remove temp file again
@@ -124,22 +128,24 @@ EOF
 done
 
 # Create temp file for job submission with so-called "here document":
-BASHSCRIPT=`mktemp $LOGDIR/test_XXXXXXXX.sh`
-DEPEND=`paste -s -d : $LOGDIR/batch`
+BASHSCRIPT=$(mktemp $LOGDIR/test_XXXXXXXX.sh)
+DEPEND=$(paste -s -d : $LOGDIR/batch)
 # ---------------------------------------------------------------------------
 cat > $BASHSCRIPT <<EOF
 #!/usr/bin/env bash
 #
-#PBS -l mem=250mb,walltime=00:10:00
-#PBS -W depend=afterany:$DEPEND
-#PBS -N run-release
-#PBS -o $LOGDIR/run-release.txt -e $LOGDIR/run-release.err
+#SBATCH --mem=250mb
+#SBATCH --time=00:10:00
+#SBATCH --dependency=afterany:$DEPEND
+#SBATCH --job-name=run-release
+#SBATCH --output=$LOGDIR/run-release.txt
+#SBATCH --eror=$LOGDIR/run-release.err
 
 $DASHBOARDDIR/run-release.sh $REVISION
 EOF
 # ---------------------------------------------------------------------------
-$QSUB $BASHSCRIPT || echo FAILED to submit run-release
+$SBATCH $BASHSCRIPT || echo FAILED to submit run-release
 rm $BASHSCRIPT
 
-for job in `cat $LOGDIR/batch` ; do qrls $job ; done
+for job in $(cat $LOGDIR/batch) ; do scontrol release $job ; done
 
