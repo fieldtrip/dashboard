@@ -106,20 +106,21 @@ BASHSCRIPT=`mktemp $LOGDIR/test_XXXXXXXX.sh`
 cat > $BASHSCRIPT <<EOF
 #!/usr/bin/env bash
 #
-% This BASH script will be automatically removed when the job has been scheduled.
+# This BASH script will be automatically removed when the job has been scheduled.
 #
 # The script to start MATLAB and execute the specific test should be called as
 #   run-test.sh <TESTSCRIPT> <FIELDTRIPDIR> <LOGDIR> <MATLABCMD>
 #
-$DASHBOARDDIR/run-test.sh $TEST $FIELDTRIPDIR $LOGDIR \'$MATLABCMD\'
+$DASHBOARDDIR/run-test.sh $TEST $FIELDTRIPDIR $LOGDIR "$MATLABCMD"
 EOF
 # ---------------------------------------------------------------------------
+
 
   # extract test name from filename
   TESTNAME=${TEST%.*}
   TESTNAME=${TESTNAME##*/}
 
-  # run test job on Torque
+  # run test job on SLURM
   job=$($SBATCH --time=$WALLTIME --mem=$MEM --job-name=$TESTNAME --output=$LOGDIR/$TESTNAME.txt --error=$LOGDIR/$TESTNAME.err $BASHSCRIPT | awk '{print $4}')
   echo $job >> $LOGDIR/batch
 
@@ -129,7 +130,7 @@ done
 
 # Create temp file for job submission with so-called "here document":
 BASHSCRIPT=$(mktemp $LOGDIR/test_XXXXXXXX.sh)
-DEPEND=$(paste -s -d : $LOGDIR/batch)
+DEPEND=$(paste -s -d , $LOGDIR/batch)
 # ---------------------------------------------------------------------------
 cat > $BASHSCRIPT <<EOF
 #!/usr/bin/env bash
@@ -144,7 +145,8 @@ cat > $BASHSCRIPT <<EOF
 $DASHBOARDDIR/run-release.sh $REVISION
 EOF
 # ---------------------------------------------------------------------------
-$SBATCH $BASHSCRIPT || echo FAILED to submit run-release
+
+sbatch --partition=batch $BASHSCRIPT || echo FAILED to submit run-release
 rm $BASHSCRIPT
 
 for job in $(cat $LOGDIR/batch) ; do scontrol release $job ; done
